@@ -1,0 +1,26 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "File Manager using Node.js APIs.",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sepulator/file-manager.git"
+  },
+  "keywords": [
+    "nodejs",
+    "assignments",
+    "alreadybored",
+    "sepulator"
+  ],
+  "author": "sepulator",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sepulator/file-manager/issues"
+  },
+  "homepage": "https://github.com/Sepulator/file-manager#readme"
+}
