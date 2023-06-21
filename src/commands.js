@@ -20,7 +20,7 @@ export const commands = {
   //compress: compress,
   //decompress: decompress,
   //hash: calcHash,
-  '--EOL': () => console.log(`Default system End-Of-Line: ${EOL}`),
+  '--EOL': () => console.log(`Default system End-Of-Line: `, JSON.stringify(EOL)),
   '--cpus': () => console.log(`Number of CPUs: ${CPUS.length} \n`, CPUS),
   '--homedir': () => console.log(`Home directory: ${HOMEDIR}`),
   '--username': () => console.log(`Current system user name: ${USERNAME}`),
