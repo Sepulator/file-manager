@@ -1,5 +1,4 @@
 import path from 'path';
-import { fileURLToPath } from 'url';
 
 export const up = () => {
   const currentDir = process.cwd();
@@ -15,14 +14,10 @@ export const cd = async (dir) => {
     return;
   }
 
-  let targetPath = dir.trim();
-  if (!path.isAbsolute(dir)) {
-    const __dirname = process.cwd();
-    targetPath = path.join(__dirname, targetPath);
-  }
-
   try {
-    process.chdir(targetPath);
+    const pathWithoutQuotes = dir.replace(/^['"]|['"]$/g, '');
+    const filePath = path.normalize(pathWithoutQuotes);
+    process.chdir(filePath);
   } catch {
     console.log('Operation failed');
   }

@@ -15,7 +15,7 @@ const main = async () => {
   });
 
   const closeInterface = () => {
-    console.log(`Thank you for using File Manager, ${NAME}, goodbye!`);
+    console.log(`\nThank you for using File Manager, ${NAME}, goodbye!`);
     readlineInterface.close();
     process.stdin.unref();
   };

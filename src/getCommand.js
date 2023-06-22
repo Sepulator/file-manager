@@ -5,9 +5,8 @@ export const getCommand = (data) => {
 
   const args = data.split(' ');
   const command = args[0];
-  const params = args[1];
-
   if (command in commands) {
+    const params = data.substring(command.length).trim();
     commands[command](params);
   } else {
     console.log(`Invalid input`);
