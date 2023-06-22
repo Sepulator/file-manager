@@ -1,12 +1,15 @@
 import { commands } from './commands.js';
 
 export const getCommand = (data) => {
-  if (!data) return console.log('Command line is empty');
+  if (!data) return console.log('Invalid input');
+
   const args = data.split(' ');
-  const param = args[0];
-  if (param in commands && param.startsWith('--')) {
-    commands[param]();
+  const command = args[0];
+  const params = args[1];
+
+  if (command in commands) {
+    commands[command](params);
   } else {
-    console.log(`Unknown command: ${param.slice(5)}`);
+    console.log(`Invalid input`);
   }
 };
