@@ -2,6 +2,7 @@ import path from 'path';
 import { readdir } from 'fs/promises';
 
 import { OPERATION_FAILED, INVALID_INPUT } from './commands.js';
+import { sortBy } from './utils.js';
 
 export const up = () => {
   const currentDir = process.cwd();
@@ -30,12 +31,24 @@ export const list = async () => {
   const currentDir = process.cwd();
 
   try {
-    const files = await readdir(currentDir, { withFileTypes: true });
+    const list = await readdir(currentDir, { withFileTypes: true });
+    const filesType = list.map((file) => {
+      return {
+        Name: file.name,
+        Type: file.isDirectory()
+          ? 'directory'
+          : file.isSymbolicLink()
+          ? 'symbolic Link'
+          : 'file',
+      };
+    });
+
+    const sortedByType = filesType.concat().sort(sortBy('Type'));
+    console.log('\n');
     console.table(
-      files.map((file) => {
+      sortedByType.map((file) => {
         return {
-          Name: file.name,
-          Type: file.isDirectory() ? 'directory' : 'file',
+          ...file,
         };
       })
     );
