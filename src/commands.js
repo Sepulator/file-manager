@@ -1,8 +1,10 @@
 import { EOL, userInfo, homedir, cpus } from 'os';
 import { up, cd, list } from './dirUtils.js';
+import { create } from './fileUtils.js';
+import { calcHash } from './hash.js';
 
 export const OPERATION_FAILED = 'Operation failed';
-export const INVALID_INPUT = 'Operation failed';
+export const INVALID_INPUT = 'Invalid input';
 
 const CPUS = cpus().map((value) => ({
   model: value.model.trim(),
@@ -12,18 +14,18 @@ const HOMEDIR = homedir();
 const USERNAME = userInfo().username;
 
 export const commands = {
-  up: () => up(),
-  cd: (dir) => cd(dir),
-  ls: () => list(),
+  up: up,
+  cd: cd,
+  ls: list,
   //cat: read,
   //cp: copy,
   //rm: remove,
-  //add: create,
+  add: create,
   //mv: move,
   //rn: rename,
   //compress: compress,
   //decompress: decompress,
-  //hash: calcHash,
+  hash: calcHash,
   '--EOL': () =>
     console.log(`Default system End-Of-Line: `, JSON.stringify(EOL)),
   '--cpus': () => console.log(`Number of CPUs: ${CPUS.length} \n`, CPUS),

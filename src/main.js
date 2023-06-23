@@ -13,7 +13,7 @@ const main = async () => {
   const readlineInterface = createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: `You are currently in ${process.cwd()} \n`,
+    prompt: `> `,
   });
 
   const closeInterface = () => {
@@ -26,23 +26,19 @@ const main = async () => {
   readlineInterface.prompt();
 
   readlineInterface.on('line', (input) => {
-    const workdir = process.cwd();
     const data = input.trim();
     try {
       if (data && data.split(' ')[0] === '.exit') {
         closeInterface();
       } else {
         getCommand(data);
-        if (workdir !== process.cwd())
-          readlineInterface.setPrompt(
-            `You are currently in ${process.cwd()} \n`
-          );
-        readlineInterface.prompt();
       }
     } catch (e) {
       console.log(INVALID_INPUT);
-      readlineInterface.prompt();
     }
+
+    console.log(`You are currently in ${process.cwd()}`);
+    readlineInterface.prompt();
   });
 
   readlineInterface.on('SIGINT', () => {

@@ -1,5 +1,5 @@
 import path from 'path';
-import { readdir, stat } from 'fs/promises';
+import { readdir } from 'fs/promises';
 
 import { OPERATION_FAILED, INVALID_INPUT } from './commands.js';
 
@@ -33,7 +33,6 @@ export const list = async () => {
     const files = await readdir(currentDir, { withFileTypes: true });
     console.table(
       files.map((file) => {
-
         return {
           Name: file.name,
           Type: file.isDirectory() ? 'directory' : 'file',
