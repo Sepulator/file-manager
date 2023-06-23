@@ -1,4 +1,7 @@
 import path from 'path';
+import { readdir, stat } from 'fs/promises';
+
+import { OPERATION_FAILED, INVALID_INPUT } from './commands.js';
 
 export const up = () => {
   const currentDir = process.cwd();
@@ -8,9 +11,9 @@ export const up = () => {
   process.chdir(parentDir);
 };
 
-export const cd = async (dir) => {
+export const cd = (dir) => {
   if (!dir) {
-    console.log('Invalid input');
+    console.log(INVALID_INPUT);
     return;
   }
 
@@ -19,6 +22,25 @@ export const cd = async (dir) => {
     const filePath = path.normalize(pathWithoutQuotes);
     process.chdir(filePath);
   } catch {
-    console.log('Operation failed');
+    console.log(OPERATION_FAILED);
+  }
+};
+
+export const list = async () => {
+  const currentDir = process.cwd();
+
+  try {
+    const files = await readdir(currentDir, { withFileTypes: true });
+    console.table(
+      files.map((file) => {
+
+        return {
+          Name: file.name,
+          Type: file.isDirectory() ? 'directory' : 'file',
+        };
+      })
+    );
+  } catch {
+    console.log(OPERATION_FAILED);
   }
 };

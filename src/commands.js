@@ -1,5 +1,8 @@
 import { EOL, userInfo, homedir, cpus } from 'os';
-import { up, cd } from './dirUtils.js';
+import { up, cd, list } from './dirUtils.js';
+
+export const OPERATION_FAILED = 'Operation failed';
+export const INVALID_INPUT = 'Operation failed';
 
 const CPUS = cpus().map((value) => ({
   model: value.model.trim(),
@@ -11,7 +14,7 @@ const USERNAME = userInfo().username;
 export const commands = {
   up: () => up(),
   cd: (dir) => cd(dir),
-  //ls: list,
+  ls: () => list(),
   //cat: read,
   //cp: copy,
   //rm: remove,

@@ -1,7 +1,9 @@
 import { createInterface } from 'node:readline/promises';
+import { homedir } from 'os';
+
+import { INVALID_INPUT } from './commands.js';
 import { getCommand } from './getCommand.js';
 import { parseArgs } from './args.js';
-import { homedir } from 'os';
 
 const NAME = parseArgs();
 const HOME_DIR = homedir();
@@ -38,7 +40,7 @@ const main = async () => {
         readlineInterface.prompt();
       }
     } catch (e) {
-      console.log('Invalid input');
+      console.log(INVALID_INPUT);
       readlineInterface.prompt();
     }
   });

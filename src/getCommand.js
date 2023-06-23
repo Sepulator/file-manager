@@ -1,4 +1,5 @@
 import { commands } from './commands.js';
+import { INVALID_INPUT } from './commands.js';
 
 export const getCommand = (data) => {
   if (!data) return console.log('Invalid input');
@@ -9,6 +10,6 @@ export const getCommand = (data) => {
     const params = data.substring(command.length).trim();
     commands[command](params);
   } else {
-    console.log(`Invalid input`);
+    console.log(INVALID_INPUT);
   }
 };
