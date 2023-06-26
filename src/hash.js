@@ -5,7 +5,6 @@ import { OPERATION_FAILED } from './commands.js';
 
 export const calcHash = async (fileName) => {
   try {
-    console.log(fileName);
     const fileData = await readFile(fileName, { encoding: 'utf8' });
     const hashObject = createHash('sha256');
     hashObject.update(fileData);

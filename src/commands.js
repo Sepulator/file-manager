@@ -2,6 +2,7 @@ import { EOL, userInfo, homedir, cpus } from 'os';
 import { up, cd, list } from './dirUtils.js';
 import { create } from './fileUtils.js';
 import { calcHash } from './hash.js';
+import { compress, decompress } from './zlib.js';
 
 export const OPERATION_FAILED = 'Operation failed';
 export const INVALID_INPUT = 'Invalid input';
@@ -23,8 +24,8 @@ export const commands = {
   add: create,
   //mv: move,
   //rn: rename,
-  //compress: compress,
-  //decompress: decompress,
+  compress: compress,
+  decompress: decompress,
   hash: calcHash,
   '--EOL': () =>
     console.log(`Default system End-Of-Line: `, JSON.stringify(EOL)),

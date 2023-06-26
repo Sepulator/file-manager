@@ -44,14 +44,9 @@ export const list = async () => {
     });
 
     const sortedByType = filesType.concat().sort(sortBy('Type'));
+
     console.log('\n');
-    console.table(
-      sortedByType.map((file) => {
-        return {
-          ...file,
-        };
-      })
-    );
+    console.table(sortedByType);
   } catch {
     console.log(OPERATION_FAILED);
   }
