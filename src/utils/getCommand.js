@@ -1,5 +1,5 @@
-import { commands } from './commands.js';
-import { INVALID_INPUT } from './commands.js';
+import { commands } from '../commands.js';
+import { INVALID_INPUT } from '../commands.js';
 
 export const getCommand = (data) => {
   if (!data) return console.log('Invalid input');

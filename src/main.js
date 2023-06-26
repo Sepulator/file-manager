@@ -2,8 +2,8 @@ import { createInterface } from 'node:readline/promises';
 import { homedir } from 'os';
 
 import { INVALID_INPUT } from './commands.js';
-import { getCommand } from './getCommand.js';
-import { parseArgs } from './args.js';
+import { getCommand } from './utils/getCommand.js';
+import { parseArgs } from './utils/args.js';
 
 const NAME = parseArgs();
 const HOME_DIR = homedir();

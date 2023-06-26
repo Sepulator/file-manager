@@ -1,8 +1,15 @@
 import { EOL, userInfo, homedir, cpus } from 'os';
-import { up, cd, list } from './dirUtils.js';
-import { create } from './fileUtils.js';
-import { calcHash } from './hash.js';
-import { compress, decompress } from './zlib.js';
+
+import { up, cd, list } from './dir/dir-utils.js';
+import { create } from './files/create.js';
+import { calcHash } from './utils/hash.js';
+import { compress } from './zip/compress.js';
+import { decompress } from './zip/decompress.js';
+import { rename } from './files/rename.js';
+import { remove } from './files/remove.js';
+import { move } from './files/move.js';
+import { copy } from './files/copy.js';
+import { read } from './files/read.js';
 
 export const OPERATION_FAILED = 'Operation failed';
 export const INVALID_INPUT = 'Invalid input';
@@ -18,12 +25,12 @@ export const commands = {
   up: up,
   cd: cd,
   ls: list,
-  //cat: read,
-  //cp: copy,
-  //rm: remove,
+  cat: read,
+  cp: copy,
+  rm: remove,
   add: create,
-  //mv: move,
-  //rn: rename,
+  mv: move,
+  rn: rename,
   compress: compress,
   decompress: decompress,
   hash: calcHash,

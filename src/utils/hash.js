@@ -1,7 +1,7 @@
 import { readFile } from 'fs/promises';
 import { createHash } from 'crypto';
 
-import { OPERATION_FAILED } from './commands.js';
+import { OPERATION_FAILED } from '../commands.js';
 
 export const calcHash = async (fileName) => {
   try {

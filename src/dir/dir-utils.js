@@ -1,8 +1,8 @@
 import path from 'path';
 import { readdir } from 'fs/promises';
 
-import { OPERATION_FAILED, INVALID_INPUT } from './commands.js';
-import { sortBy } from './utils.js';
+import { OPERATION_FAILED, INVALID_INPUT } from '../commands.js';
+import { sortBy } from '../utils/utils.js';
 
 export const up = () => {
   const currentDir = process.cwd();
