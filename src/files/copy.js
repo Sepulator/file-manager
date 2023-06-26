@@ -11,10 +11,15 @@ export const copy = async (data) => {
     return;
   }
 
-  const fileName = path.basename(args[0].replace(/^['"]|['"]$/g, ''));
-  const destPath = path.join(args[1].replace(/^['"]|['"]$/g, ''), `${fileName}`);
-
-  await pipeline(createReadStream(fileName), createWriteStream(destPath)).catch(
-    () => console.log(OPERATION_FAILED)
+  const srcPath = args[0].replace(/^['"]|['"]$/g, '');
+  const fileName = path.basename(srcPath);
+  const destPath = path.join(
+    args[1].replace(/^['"]|['"]$/g, ''),
+    `${fileName}`
   );
+
+  await pipeline(
+    createReadStream(srcPath),
+    createWriteStream(destPath)
+  ).catch(() => console.log(OPERATION_FAILED));
 };

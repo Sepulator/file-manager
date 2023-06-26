@@ -14,12 +14,9 @@ export const compress = async (data) => {
   }
 
   const brotliCompress = createBrotliCompress();
-  const fileName = path.basename(args[0].replace(/^['"]|['"]$/g, ''));
-  const srcPath = path.resolve(fileName);
-
-  const pathDest = args[1]
-    ? path.join(args[1].replace(/^['"]|['"]$/g, ''), `${fileName}.br`)
-    : path.join(process.cwd(), `${fileName}.br`);
+  const srcPath = args[0].replace(/^['"]|['"]$/g, '');
+  const fileName = path.basename(srcPath);
+  const pathDest = path.join(args[1].replace(/^['"]|['"]$/g, ''), `${fileName}.br`);
 
   await pipeline(
     createReadStream(srcPath),

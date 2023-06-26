@@ -13,15 +13,14 @@ export const move = async (data) => {
     return;
   }
 
-  const fileName = path.basename(args[0].replace(/^['"]|['"]$/g, ''));
-  const pathDest = path.join(
+  const srcPath = args[0].replace(/^['"]|['"]$/g, '');
+  const fileName = path.basename(srcPath);
+  const destPath = path.join(
     args[1].replace(/^['"]|['"]$/g, ''),
     `${fileName}`
   );
 
-  await pipeline(createReadStream(fileName), createWriteStream(pathDest))
-    .then(async () => {
-      await unlink(fileName);
-    })
+  await pipeline(createReadStream(srcPath), createWriteStream(destPath))
+    .then(async () => await unlink(srcPath))
     .catch(() => console.log(OPERATION_FAILED));
 };
