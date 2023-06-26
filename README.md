@@ -5,3 +5,7 @@ The program is started by npm-script `start` in following way:
 ```bash
 npm run start -- --username=your_username
 ```
+To start with with default name:
+```bash
+npm run start:n
+```
