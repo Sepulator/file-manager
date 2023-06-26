@@ -12,17 +12,9 @@ export const copy = async (data) => {
   }
 
   const fileName = path.basename(args[0].replace(/^['"]|['"]$/g, ''));
-  const srcPath = path.resolve(fileName);
-  const destPath = path.join(
-    args[1].replace(/^['"]|['"]$/g, ''),
-    `${fileName}`
-  );
+  const destPath = path.join(args[1].replace(/^['"]|['"]$/g, ''), `${fileName}`);
 
-  try {
-    const readStream = createReadStream(srcPath);
-    const writeStream = createWriteStream(destPath);
-    await pipeline(srcPath, destPath);
-  } catch {
-    console.log(OPERATION_FAILED);
-  }
+  await pipeline(createReadStream(fileName), createWriteStream(destPath)).catch(
+    () => console.log(OPERATION_FAILED)
+  );
 };

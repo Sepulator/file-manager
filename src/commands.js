@@ -1,6 +1,6 @@
 import { EOL, userInfo, homedir, cpus } from 'os';
 
-import { up, cd, list } from './dir/dir-utils.js';
+import { up, cd, list } from './dir/dir.js';
 import { create } from './files/create.js';
 import { calcHash } from './utils/hash.js';
 import { compress } from './zip/compress.js';
@@ -34,7 +34,7 @@ export const commands = {
   compress: compress,
   decompress: decompress,
   hash: calcHash,
-  '--EOL': () =>
+  '--eol': () =>
     console.log(`Default system End-Of-Line: `, JSON.stringify(EOL)),
   '--cpus': () => console.log(`Number of CPUs: ${CPUS.length} \n`, CPUS),
   '--homedir': () => console.log(`Home directory: ${HOMEDIR}`),

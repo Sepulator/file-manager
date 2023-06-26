@@ -21,11 +21,9 @@ export const compress = async (data) => {
     ? path.join(args[1].replace(/^['"]|['"]$/g, ''), `${fileName}.br`)
     : path.join(process.cwd(), `${fileName}.br`);
 
-  try {
-    const readStream = createReadStream(srcPath);
-    const writeStream = createWriteStream(pathDest);
-    await pipeline(readStream, brotliCompress, writeStream);
-  } catch {
-    console.log(OPERATION_FAILED);
-  }
+  await pipeline(
+    createReadStream(srcPath),
+    brotliCompress,
+    createWriteStream(pathDest)
+  ).catch(() => console.log(OPERATION_FAILED));
 };
