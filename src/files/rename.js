@@ -15,9 +15,5 @@ export const rename = async (data) => {
   const dirName = path.dirname(srcPath);
   const destPath = path.join(dirName, fileName);
 
-  try {
-    await renameFs(srcPath, destPath);
-  } catch {
-    console.log(OPERATION_FAILED);
-  }
+  await renameFs(srcPath, destPath).catch(() => console.log(OPERATION_FAILED));
 };

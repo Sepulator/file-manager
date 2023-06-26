@@ -1,6 +1,6 @@
 import { EOL, userInfo, homedir, cpus } from 'os';
 
-import { up, cd, list } from './dir/dir-utils.js';
+import { up, cd, list } from './dir/dir.js';
 import { create } from './files/create.js';
 import { calcHash } from './utils/hash.js';
 import { compress } from './zip/compress.js';

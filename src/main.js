@@ -1,4 +1,4 @@
-import { createInterface } from 'node:readline/promises';
+import { createInterface } from 'readline/promises';
 import { homedir } from 'os';
 
 import { INVALID_INPUT } from './commands.js';
@@ -25,20 +25,19 @@ const main = async () => {
   console.log(`Welcome to the File Manager, ${NAME}`);
   readlineInterface.prompt();
 
-  readlineInterface.on('line', (input) => {
+  readlineInterface.on('line', async (input) => {
     const data = input.trim();
-    try {
-      if (data && data.split(' ')[0] === '.exit') {
-        closeInterface();
-      } else {
-        getCommand(data);
-      }
-    } catch (e) {
-      console.log(INVALID_INPUT);
+
+    if (data && data.split(' ')[0] === '.exit') {
+      closeInterface();
     }
 
-    console.log(`You are currently in ${process.cwd()}`);
-    readlineInterface.prompt();
+    await getCommand(data)
+      .catch(() => console.log(INVALID_INPUT))
+      .finally(() => {
+        console.log(`You are currently in ${process.cwd()}`);
+        readlineInterface.prompt();
+      });
   });
 
   readlineInterface.on('SIGINT', () => {

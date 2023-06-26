@@ -3,18 +3,12 @@ import { unlink } from 'fs/promises';
 import { OPERATION_FAILED, INVALID_INPUT } from '../commands.js';
 
 export const remove = async (data) => {
-  const args = data.split(' ');
-
-  if (args.length !== 1) {
+  if (!data) {
     console.log(INVALID_INPUT);
     return;
   }
 
-  const srcPath = args[0].replace(/^['"]|['"]$/g, '');
+  const srcPath = data.replace(/^['"]|['"]$/g, '');
 
-  try {
-    await unlink(srcPath);
-  } catch {
-    console.log(OPERATION_FAILED);
-  }
+  await unlink(srcPath).catch(() => console.log(OPERATION_FAILED));
 };
