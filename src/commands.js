@@ -1,3 +1,6 @@
+import { stdout } from 'process';
+import { EOL } from 'os';
+import { createReadStream } from 'fs';
 import { dirname, resolve } from 'path';
 import { stat, readdir } from 'fs/promises';
 import { config, isRootDirectory, showCurrentPath } from './utils.js';
@@ -49,8 +52,26 @@ const ls = async () => {
   console.table(result);
 };
 
+const cat = async (path) => {
+  const filePath = resolve(config.currentDir, path);
+  const stats = await stat(filePath);
+
+  if (!stats.isFile()) {
+    console.log('Invalid input');
+    return;
+  }
+
+  const readStream = createReadStream(filePath, { encoding: 'utf8' });
+  readStream.pipe(stdout);
+  readStream.on('end', () => {
+    console.log(`${EOL}`);
+    showCurrentPath();
+  });
+};
+
 export const commands = {
   up,
   cd,
   ls,
+  cat,
 };

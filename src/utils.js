@@ -1,6 +1,6 @@
 import { dirname } from 'path';
 import { argv, exit } from 'process';
-import { homedir, platform } from 'os';
+import { homedir, platform, EOL } from 'os';
 
 import { commands } from './commands.js';
 
@@ -36,7 +36,7 @@ export const welcome = () =>
 
 export const closeApp = () => {
   console.log(
-    `\nThank you for using File Manager, ${config.username}, goodbye!`
+    `${EOL}Thank you for using File Manager, ${config.username}, goodbye!`
   );
   process.exit(0);
 };
@@ -56,7 +56,7 @@ export const processCommand = async (input) => {
       console.log('Invalid input');
     }
   } catch (error) {
-    console.log('Operation failed');
+    console.log(`Operation failed: ${error.message}`);
   }
 
   showCurrentPath();
