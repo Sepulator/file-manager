@@ -53,11 +53,10 @@ export const processCommand = async (input) => {
     if (isCommandValid) {
       await commands[command](...args);
     } else {
-      console.log('Invalid input');
+      console.log(`⚠️ Invalid input: ${error.message}`);
     }
   } catch (error) {
-    console.log(`Operation failed: ${error.message}`);
+    console.log(`⚠️ Operation failed: ${error.message}`);
   }
-
   showCurrentPath();
 };

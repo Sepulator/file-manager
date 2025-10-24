@@ -1,8 +1,9 @@
 import { stdout } from 'process';
 import { EOL } from 'os';
-import { dirname, resolve } from 'path';
-import { stat, readdir, writeFile, rename } from 'fs/promises';
+import { dirname, resolve, basename } from 'path';
+import { stat, readdir, rename, mkdir as makeDir } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'fs';
+import { pipeline } from 'stream/promises';
 
 import { config, isRootDirectory, showCurrentPath } from './utils.js';
 
@@ -28,7 +29,7 @@ const cd = async (path) => {
   const stats = await stat(newPath);
 
   if (!stats.isDirectory()) {
-    console.log('Invalid input');
+    console.log('⚠️ Invalid input. The specified path is not a directory.');
     return;
   }
 
@@ -58,7 +59,7 @@ const cat = async (path) => {
   const stats = await stat(filePath);
 
   if (!stats.isFile()) {
-    console.log('Invalid input');
+    console.log('⚠️ Invalid input. The specified path is not a file.');
     return;
   }
 
@@ -72,18 +73,19 @@ const cat = async (path) => {
 
 const add = async (fileName) => {
   if (!fileName) {
-    console.log('Invalid input');
+    console.log('⚠️ Invalid input. File name is required.');
     return;
   }
 
   const filePath = resolve(config.currentDir, fileName);
   const writeStream = createWriteStream(filePath, { flags: 'wx' });
   writeStream.end();
+  console.log(`✅ File created ${filePath}`);
 };
 
 const rn = async (oldFileName, newFileName) => {
   if (!oldFileName || !newFileName) {
-    console.log('Invalid input');
+    console.log('⚠️ Invalid input. Both old and new file names are required.');
     return;
   }
 
@@ -92,6 +94,39 @@ const rn = async (oldFileName, newFileName) => {
 
   await stat(oldFilePath);
   await rename(oldFilePath, newFilePath);
+  console.log(`✅ File renamed to ${newFilePath}`);
+};
+
+const mkdir = async (dirName) => {
+  if (!dirName) {
+    console.log('Invalid input. Directory name is required.');
+    return;
+  }
+
+  const dirPath = resolve(config.currentDir, dirName);
+  await makeDir(dirPath);
+  console.log(`✅ Directory created ${dirPath}`);
+};
+
+const cp = async (source, destination) => {
+  if (!source || !destination) {
+    console.log('⚠️ Invalid input. Source and destination are required.');
+    return;
+  }
+
+  const sourcePath = resolve(config.currentDir, source);
+  const destinationDirPath = resolve(config.currentDir, destination);
+  const filename = basename(sourcePath);
+  const destPath = resolve(destinationDirPath, filename);
+
+  await stat(sourcePath);
+  await stat(destinationDirPath);
+
+  const readStream = createReadStream(sourcePath);
+  const writeStream = createWriteStream(destPath);
+
+  await pipeline(readStream, writeStream);
+  console.log(`✅ File copied to ${destPath}`);
 };
 
 export const commands = {
@@ -99,6 +134,8 @@ export const commands = {
   up,
   cd,
   ls,
+  cp,
   add,
   cat,
+  mkdir,
 };
