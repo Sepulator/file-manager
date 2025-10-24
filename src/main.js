@@ -1,31 +1,21 @@
 import { createInterface } from 'readline/promises';
-import { username, currentDir } from './utils.js';
-
-const rl = createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-const showCurrentPath = () => console.log(`You are currently in ${currentDir}`);
-
-const processCommand = (input) => {
-  showCurrentPath();
-  if (!input) {
-    return;
-  }
-};
+import { showCurrentPath, welcome, closeApp, processCommand } from './utils.js';
 
 const start = () => {
-  console.log(`Welcome to the File Manager, ${username}!`);
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  welcome();
   showCurrentPath();
 
   rl.on('close', () => {
-    console.log(`\nThank you for using File Manager, ${username}, goodbye!`);
-    process.exit(0);
+    closeApp();
   });
 
-  rl.on('line', (input) => {
-    processCommand(input.trim());
+  rl.on('line', async (input) => {
+    await processCommand(input.trim());
   });
 };
 
