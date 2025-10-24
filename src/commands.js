@@ -1,7 +1,7 @@
 import { stdout } from 'process';
 import { EOL } from 'os';
 import { dirname, resolve, basename } from 'path';
-import { stat, readdir, rename, mkdir as makeDir } from 'fs/promises';
+import { stat, readdir, rename, mkdir as makeDir, unlink } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'fs';
 import { pipeline } from 'stream/promises';
 
@@ -99,7 +99,7 @@ const rn = async (oldFileName, newFileName) => {
 
 const mkdir = async (dirName) => {
   if (!dirName) {
-    console.log('Invalid input. Directory name is required.');
+    console.log('⚠️ Invalid input. Directory name is required.');
     return;
   }
 
@@ -108,7 +108,7 @@ const mkdir = async (dirName) => {
   console.log(`✅ Directory created ${dirPath}`);
 };
 
-const cp = async (source, destination) => {
+const fileAction = async (source, destination) => {
   if (!source || !destination) {
     console.log('⚠️ Invalid input. Source and destination are required.');
     return;
@@ -126,7 +126,17 @@ const cp = async (source, destination) => {
   const writeStream = createWriteStream(destPath);
 
   await pipeline(readStream, writeStream);
-  console.log(`✅ File copied to ${destPath}`);
+};
+
+const cp = async (source, destination) => {
+  await fileAction(source, destination);
+  console.log(`✅ File copied to ${destination}`);
+};
+
+const mv = async (source, destination) => {
+  await fileAction(source, destination);
+  await unlink(source);
+  console.log(`✅ File moved to ${destination}`);
 };
 
 export const commands = {
@@ -135,6 +145,7 @@ export const commands = {
   cd,
   ls,
   cp,
+  mv,
   add,
   cat,
   mkdir,
