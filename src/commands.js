@@ -1,8 +1,9 @@
 import { stdout } from 'process';
 import { EOL } from 'os';
-import { createReadStream } from 'fs';
 import { dirname, resolve } from 'path';
-import { stat, readdir } from 'fs/promises';
+import { stat, readdir, writeFile, rename } from 'fs/promises';
+import { createReadStream, createWriteStream } from 'fs';
+
 import { config, isRootDirectory, showCurrentPath } from './utils.js';
 
 const up = async () => {
@@ -69,9 +70,35 @@ const cat = async (path) => {
   });
 };
 
+const add = async (fileName) => {
+  if (!fileName) {
+    console.log('Invalid input');
+    return;
+  }
+
+  const filePath = resolve(config.currentDir, fileName);
+  const writeStream = createWriteStream(filePath, { flags: 'wx' });
+  writeStream.end();
+};
+
+const rn = async (oldFileName, newFileName) => {
+  if (!oldFileName || !newFileName) {
+    console.log('Invalid input');
+    return;
+  }
+
+  const oldFilePath = resolve(config.currentDir, oldFileName);
+  const newFilePath = resolve(config.currentDir, newFileName);
+
+  await stat(oldFilePath);
+  await rename(oldFilePath, newFilePath);
+};
+
 export const commands = {
+  rn,
   up,
   cd,
   ls,
+  add,
   cat,
 };
