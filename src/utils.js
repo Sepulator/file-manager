@@ -55,9 +55,9 @@ export const processCommand = async (input) => {
     } else {
       console.log('Invalid input');
     }
-
-    showCurrentPath();
   } catch (error) {
     console.log('Operation failed');
   }
+
+  showCurrentPath();
 };
