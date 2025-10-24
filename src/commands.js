@@ -130,13 +130,19 @@ const fileAction = async (source, destination) => {
 
 const cp = async (source, destination) => {
   await fileAction(source, destination);
-  console.log(`✅ File copied to ${destination}`);
+  console.log(`✅ File successfully copied.`);
 };
 
 const mv = async (source, destination) => {
   await fileAction(source, destination);
   await unlink(source);
-  console.log(`✅ File moved to ${destination}`);
+  console.log(`✅ File successfully moved.`);
+};
+
+const rm = async (source) => {
+  const sourcePath = resolve(config.currentDir, source);
+  await unlink(sourcePath);
+  console.log(`✅ File successfully removed.`);
 };
 
 export const commands = {
@@ -145,6 +151,7 @@ export const commands = {
   cd,
   ls,
   cp,
+  rm,
   mv,
   add,
   cat,
