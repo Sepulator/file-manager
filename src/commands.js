@@ -1,5 +1,5 @@
 import { dirname, resolve } from 'path';
-import { stat } from 'fs/promises';
+import { stat, readdir } from 'fs/promises';
 import { config, isRootDirectory, showCurrentPath } from './utils.js';
 
 const up = async () => {
@@ -31,7 +31,26 @@ const cd = async (path) => {
   config.currentDir = newPath;
 };
 
+const ls = async () => {
+  const items = await readdir(config.currentDir, { withFileTypes: true });
+
+  const sortedItems = items.sort((a, b) => {
+    if (a.isDirectory() && !b.isDirectory()) return -1;
+    if (!a.isDirectory() && b.isDirectory()) return 1;
+
+    return a.name.localeCompare(b.name);
+  });
+
+  const result = sortedItems.map((item) => ({
+    Name: item.name,
+    Type: item.isDirectory() ? 'directory' : 'file',
+  }));
+
+  console.table(result);
+};
+
 export const commands = {
   up,
   cd,
+  ls,
 };
