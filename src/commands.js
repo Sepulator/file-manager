@@ -139,10 +139,22 @@ const mv = async (source, destination) => {
   console.log(`✅ File successfully moved.`);
 };
 
-const rm = async (source) => {
-  const sourcePath = resolve(config.currentDir, source);
-  await unlink(sourcePath);
+const rm = async (path) => {
+  const filePath = resolve(config.currentDir, path);
+  await unlink(filePath);
   console.log(`✅ File successfully removed.`);
+};
+
+const hash = async (path) => {
+  const crypto = await import('crypto');
+  const filePath = resolve(config.currentDir, path);
+  await stat(filePath);
+
+  const hash = crypto.createHash('sha256');
+  const readStream = createReadStream(filePath);
+  await pipeline(readStream, hash);
+
+  console.log(`✅ File hash: ${hash.digest('hex')}`);
 };
 
 export const commands = {
@@ -156,4 +168,5 @@ export const commands = {
   add,
   cat,
   mkdir,
+  hash,
 };
