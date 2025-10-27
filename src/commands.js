@@ -6,7 +6,7 @@ import { createReadStream, createWriteStream } from 'fs';
 import { createBrotliCompress, createBrotliDecompress } from 'zlib';
 import { stat, readdir, rename, mkdir as makeDir, unlink } from 'fs/promises';
 
-import { config, isRootDirectory, showCurrentPath } from './utils.js';
+import { config, isRootDirectory, osKeys, showCurrentPath } from './utils.js';
 
 const up = async () => {
   const parent = dirname(config.currentDir);
@@ -195,6 +195,20 @@ const decompress = async (source, destination) => {
   await compressAction(source, destination, 'decompress');
 };
 
+const os = (key) => {
+  if (!key || !key.startsWith('--')) {
+    console.log("⚠️ Invalid input. Provide key with '--' at beginning .");
+  }
+
+  const isKeyValid = key in osKeys;
+
+  if (isKeyValid) {
+    osKeys[key]();
+  } else {
+    console.log('⚠️ Invalid input. Provided key is not valid.');
+  }
+};
+
 export const commands = {
   rn,
   up,
@@ -203,6 +217,7 @@ export const commands = {
   cp,
   rm,
   mv,
+  os,
   add,
   cat,
   mkdir,
