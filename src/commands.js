@@ -1,9 +1,10 @@
-import { stdout } from 'process';
 import { EOL } from 'os';
-import { dirname, resolve, basename } from 'path';
-import { stat, readdir, rename, mkdir as makeDir, unlink } from 'fs/promises';
-import { createReadStream, createWriteStream } from 'fs';
+import { stdout } from 'process';
 import { pipeline } from 'stream/promises';
+import { dirname, resolve, basename, format } from 'path';
+import { createReadStream, createWriteStream } from 'fs';
+import { createBrotliCompress, createBrotliDecompress } from 'zlib';
+import { stat, readdir, rename, mkdir as makeDir, unlink } from 'fs/promises';
 
 import { config, isRootDirectory, showCurrentPath } from './utils.js';
 
@@ -157,6 +158,43 @@ const hash = async (path) => {
   console.log(`✅ File hash: ${hash.digest('hex')}`);
 };
 
+const compressAction = async (source, destination, action) => {
+  if (!source || !destination) {
+    console.log('⚠️ Invalid input. Source and destination are required.');
+    return;
+  }
+
+  const sourcePath = resolve(config.currentDir, source);
+  const filename = basename(sourcePath);
+  const destinationDirPath = resolve(config.currentDir, destination);
+
+  const destinationPath = format({
+    dir: destinationDirPath,
+    name: action === 'compress' ? filename : filename.replace(/\.br$/, ''),
+    ext: action === 'compress' ? '.br' : '',
+  });
+
+  const readableStream = createReadStream(sourcePath);
+  const writableStream = createWriteStream(destinationPath);
+  const brotli =
+    action === 'compress' ? createBrotliCompress() : createBrotliDecompress();
+
+  await pipeline(readableStream, brotli, writableStream);
+  console.log(
+    `✅ File ${
+      action === 'compress' ? 'compressed' : 'decompressed'
+    } successfully!`
+  );
+};
+
+const compress = async (source, destination) => {
+  await compressAction(source, destination, 'compress');
+};
+
+const decompress = async (source, destination) => {
+  await compressAction(source, destination, 'decompress');
+};
+
 export const commands = {
   rn,
   up,
@@ -169,4 +207,6 @@ export const commands = {
   cat,
   mkdir,
   hash,
+  compress,
+  decompress,
 };
