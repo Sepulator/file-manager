@@ -6,7 +6,8 @@ import { createReadStream, createWriteStream } from 'fs';
 import { createBrotliCompress, createBrotliDecompress } from 'zlib';
 import { stat, readdir, rename, mkdir as makeDir, unlink } from 'fs/promises';
 
-import { config, isRootDirectory, osKeys, showCurrentPath } from './utils.js';
+import { config } from './const.js';
+import { isRootDirectory, osKeys, showCurrentPath, closeApp } from './utils.js';
 
 const up = async () => {
   const parent = dirname(config.currentDir);
@@ -224,4 +225,5 @@ export const commands = {
   hash,
   compress,
   decompress,
+  '.exit': closeApp,
 };

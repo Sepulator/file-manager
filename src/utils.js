@@ -1,22 +1,8 @@
 import { dirname } from 'path';
-import { argv, exit } from 'process';
 import { homedir, platform, EOL, cpus, userInfo, arch } from 'os';
 
 import { commands } from './commands.js';
-
-const parseArgsUsername = () => {
-  const args = argv.slice(2);
-  const usernameArg = args.find((arg) => arg.startsWith('--username='));
-
-  if (!usernameArg) {
-    console.error('Please provide --username argument');
-    exit(1);
-  }
-
-  return usernameArg.split('=')[1];
-};
-
-export const config = { currentDir: homedir(), username: parseArgsUsername() };
+import { config } from './const.js';
 
 export const isRootDirectory = (path) => {
   const currentPlatform = platform();
@@ -34,12 +20,12 @@ export const showCurrentPath = () =>
 export const welcome = () =>
   console.log(`Welcome to the File Manager, ${config.username}!`);
 
-export const closeApp = () => {
+export function closeApp() {
   console.log(
     `${EOL}Thank you for using File Manager, ${config.username}, goodbye!`
   );
   process.exit(0);
-};
+}
 
 export const processCommand = async (input) => {
   try {
@@ -75,7 +61,7 @@ const getCPUs = () => {
 
 export const osKeys = {
   '--EOL': () => console.log(`  EOL: ${JSON.stringify(EOL)}`),
-  '--cpus': () => getCPUs(),
+  '--cpus': getCPUs,
   '--homedir': () => console.log(`  Home directory: ${config.currentDir}`),
   '--username': () => console.log(`  Current user: ${userInfo().username}`),
   '--architecture': () => console.log(`  CPU Architecture: ${arch()}`),
