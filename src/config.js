@@ -1,6 +1,7 @@
+import { homedir } from 'os';
 import { argv, exit } from 'process';
 
-export const parseArgsUsername = () => {
+const parseArgsUsername = () => {
   const args = argv.slice(2);
   const usernameArg = args.find((arg) => arg.startsWith('--username='));
 
@@ -11,3 +12,5 @@ export const parseArgsUsername = () => {
 
   return usernameArg.split('=')[1];
 };
+
+export const config = { currentDir: homedir(), username: parseArgsUsername() };

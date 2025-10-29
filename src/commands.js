@@ -1,13 +1,15 @@
 import { EOL } from 'os';
 import { stdout } from 'process';
 import { pipeline } from 'stream/promises';
-import { dirname, resolve, basename, format } from 'path';
+import { dirname, resolve } from 'path';
 import { createReadStream, createWriteStream } from 'fs';
-import { createBrotliCompress, createBrotliDecompress } from 'zlib';
 import { stat, readdir, rename, mkdir as makeDir, unlink } from 'fs/promises';
 
-import { config } from './const.js';
-import { isRootDirectory, osKeys, showCurrentPath, closeApp } from './utils.js';
+import { osKeys } from './osKeys.js';
+import { config } from './config.js';
+import { fileAction } from './fileAction.js';
+import { compressAction } from './compressAction.js';
+import { isRootDirectory, showCurrentPath, closeApp } from './utils.js';
 
 const up = async () => {
   const parent = dirname(config.currentDir);
@@ -110,26 +112,6 @@ const mkdir = async (dirName) => {
   console.log(`✅ Directory created ${dirPath}`);
 };
 
-const fileAction = async (source, destination) => {
-  if (!source || !destination) {
-    console.log('⚠️ Invalid input. Source and destination are required.');
-    return;
-  }
-
-  const sourcePath = resolve(config.currentDir, source);
-  const destinationDirPath = resolve(config.currentDir, destination);
-  const filename = basename(sourcePath);
-  const destPath = resolve(destinationDirPath, filename);
-
-  await stat(sourcePath);
-  await stat(destinationDirPath);
-
-  const readStream = createReadStream(sourcePath);
-  const writeStream = createWriteStream(destPath);
-
-  await pipeline(readStream, writeStream);
-};
-
 const cp = async (source, destination) => {
   await fileAction(source, destination);
   console.log(`✅ File successfully copied.`);
@@ -157,35 +139,6 @@ const hash = async (path) => {
   await pipeline(readStream, hash);
 
   console.log(`✅ File hash: ${hash.digest('hex')}`);
-};
-
-const compressAction = async (source, destination, action) => {
-  if (!source || !destination) {
-    console.log('⚠️ Invalid input. Source and destination are required.');
-    return;
-  }
-
-  const sourcePath = resolve(config.currentDir, source);
-  const filename = basename(sourcePath);
-  const destinationDirPath = resolve(config.currentDir, destination);
-
-  const destinationPath = format({
-    dir: destinationDirPath,
-    name: action === 'compress' ? filename : filename.replace(/\.br$/, ''),
-    ext: action === 'compress' ? '.br' : '',
-  });
-
-  const readableStream = createReadStream(sourcePath);
-  const writableStream = createWriteStream(destinationPath);
-  const brotli =
-    action === 'compress' ? createBrotliCompress() : createBrotliDecompress();
-
-  await pipeline(readableStream, brotli, writableStream);
-  console.log(
-    `✅ File ${
-      action === 'compress' ? 'compressed' : 'decompressed'
-    } successfully!`
-  );
 };
 
 const compress = async (source, destination) => {
