@@ -13,5 +13,5 @@
 ### 2. Start script
 
 ```bash
-  npm run start -- --username=username
+  npm run start -- --username=your_username
 ```
