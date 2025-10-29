@@ -113,14 +113,12 @@ const mkdir = async (dirName) => {
 };
 
 const cp = async (source, destination) => {
-  await fileAction(source, destination);
-  console.log(`✅ File successfully copied.`);
+  await fileAction(source, destination, 'copy');
 };
 
 const mv = async (source, destination) => {
-  await fileAction(source, destination);
+  await fileAction(source, destination, 'move');
   await unlink(source);
-  console.log(`✅ File successfully moved.`);
 };
 
 const rm = async (path) => {
