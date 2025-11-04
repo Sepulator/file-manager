@@ -1,6 +1,8 @@
 import { stat } from 'fs/promises';
 import { resolve, basename } from 'path';
 import { createReadStream, createWriteStream } from 'fs';
+import { pipeline } from 'stream/promises';
+import { config } from './config.js';
 
 export const fileAction = async (source, destination, action) => {
   if (!source || !destination) {
